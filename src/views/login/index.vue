@@ -80,11 +80,22 @@ export default {
       // console.log(this.$refs.abc)//获取到整个表单对象(dom对象)
       this.$refs.abc.validate(isOk => {
         if (isOk) {
-          this.$message({ message: '成功',
-            type: 'success' })
-        } else {
-          this.$message({ message: '手机号或者验证码错误',
-            type: 'warning' })
+          // 验证通过发送axios请求
+          // axios 中 data中放置body参数 params是放置地址参数的
+          this.$axios({
+            url: '/authorizations',
+            methods: 'post',
+            data: this.loginForm
+          }).then(res => {
+            // 成功放在前端缓存中
+            window.localStorage.setItem('user-token', res.data.data.token)
+            // 编程式导航跳转到home页
+            this.$router.push('/')
+          }).catch(() => {
+            this.$message({
+              message: '手机号或者验证码错误',
+              type: 'warning' })// 错误的话提示用户
+          })
         }
       })
     }
