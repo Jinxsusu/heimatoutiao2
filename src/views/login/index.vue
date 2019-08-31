@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style lang="less" scoped >
-// 如果要用less格式写css就要在style标签上注明lang="less"
+//如果要用less格式写css就要在style标签上注明lang="less"
 //默认情况下vue单文件的style样式是全局的(如果类名相同的话就会覆盖掉)
 //解决方法:在style标签上加上scoped属性就只会对当前组件上的html起作用
 //scoped和插槽上的scoped-slot没有任何关系
