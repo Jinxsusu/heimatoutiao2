@@ -74,7 +74,7 @@ export default {
     login () {
       // 点击登录以后对整个表单进行验证
       // 通过的是el-form组件中的  validate方法
-      // 参数为一个回调函数。该回调函数会在校验结束后被调用，
+      // 参数为一个回调函数。该回调函数会在校验结1束后被调用，
       // 并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise对象
       // Function(callback: Function(boolean, object))
       // console.log(this.$refs.abc)//获取到整个表单对象(dom对象)

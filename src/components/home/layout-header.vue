@@ -7,17 +7,19 @@
     </el-col>
     <el-col class="right" :span="3">
       <!-- 属性不给:就相当于字符串 -->
-      <img :src="userInfo.photo ? userInfo.photo :defaultImg"  alt />
-      <el-dropdown trigger="click">
+      <img :src="userInfo.photo ? userInfo.photo :defaultImg" alt />
+      <el-dropdown trigger="click" @command="handleMenuItem">
+        <!-- 绑定handleMenuItem"事件 -->
         <span class="el-dropdown-link">
           {{userInfo.name}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <!-- 具名插槽 -->
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人信息</el-dropdown-item>
-          <el-dropdown-item>Git地址</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <!-- 监听中的command事件,并且给 l-dropdown属性 附上值区分不同的 -->
+          <el-dropdown-item command="account">个人信息</el-dropdown-item>
+          <el-dropdown-item command="git">Git地址</el-dropdown-item>
+          <el-dropdown-item command="lgout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-col>
@@ -44,12 +46,25 @@ export default {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => {
-          console.log(res)
+          // console.log(res)
           this.userInfo = res.data.data
         })
         .catch(err => {
           console.log(err)
         })
+    },
+    // 点击退出以后 退出登录
+    handleMenuItem (command) {
+      if (command === 'account') {
+        console.log('账户信息')
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com/shuiruohanyu/82heimatoutiao'
+        // 点击的话触发跳转到对应的git地址
+      } else if (command === 'lgout') {
+        // 退出
+        window.localStorage.clear() // 清空本地缓存
+        this.$router.push('/login') // 编程式导航跳转到登录页
+      }
     }
   },
   created () {
