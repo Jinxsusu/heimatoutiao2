@@ -6,10 +6,11 @@
       <span>江苏传智播客教育科技股份有限公司</span>
     </el-col>
     <el-col class="right" :span="3">
-      <img src="../../assets/img/avatar.jpg" alt />
+      <!-- 属性不给:就相当于字符串 -->
+      <img :src="userInfo.photo ? userInfo.photo :defaultImg"  alt />
       <el-dropdown trigger="click">
         <span class="el-dropdown-link">
-          苏苏
+          {{userInfo.name}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <!-- 具名插槽 -->
@@ -24,7 +25,39 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      userInfo: {},
+      defaultImg: require('../../assets/img/avatar.jpg')
+      // 要把本地图片的路径转成base64字符串,不然读不出来
+    }
+  },
+  methods: {
+    // 发送请求获取用户数据
+    getUserInfo () {
+      // 获取到token值并保存到变量中
+      let token = window.localStorage.getItem('user-token')
+      // 发送请求
+      this.$axios({
+        url: '/user/profile',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => {
+          console.log(res)
+          this.userInfo = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  },
+  created () {
+    // 一进入页面就要获取
+    // 数据获取以后才渲染页面所有用created这个钩子函数
+    this.getUserInfo()
+  }
+}
 </script>
 
 <style lang="less" scoped>
