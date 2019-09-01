@@ -84,11 +84,11 @@ export default {
           // axios 中 data中放置body参数 params是放置地址参数的
           this.$axios({
             url: '/authorizations',
-            methods: 'post',
+            method: 'post',
             data: this.loginForm
-          }).then(res => {
+          }).then(result => {
             // 成功放在前端缓存中
-            window.localStorage.setItem('user-token', res.data.data.token)
+            window.localStorage.setItem('user-token', result.data.data.token)
             // 编程式导航跳转到home页
             this.$router.push('/')
           }).catch(() => {

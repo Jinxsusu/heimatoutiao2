@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/home/home.vue'// 引入首页
+import Home from './views/home/index.vue'// 引入首页
 import Login from './views/login/index.vue'// 引入登录页
 Vue.use(Router)
 
