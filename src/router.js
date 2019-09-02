@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/home/index.vue'// 引入首页
 import Login from './views/login/index.vue'// 引入登录页
+import Main from './views/home/main.vue'// 引入mian页面
 Vue.use(Router)
 
 export default new Router({
@@ -17,7 +18,11 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
+      children: [{
+        path: '', // 默认的二级路由的地址 path为空
+        component: Main
+      }]
     }
     // {
     //   path: '/about',
