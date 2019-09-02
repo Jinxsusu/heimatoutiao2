@@ -91,10 +91,6 @@ export default {
             window.localStorage.setItem('user-token', result.data.token)
             // 编程式导航跳转到home页
             this.$router.push('/')
-          }).catch(() => {
-            this.$message({
-              message: '手机号或者验证码错误',
-              type: 'warning' })// 错误的话提示用户
           })
         }
       })

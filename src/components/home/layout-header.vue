@@ -45,9 +45,6 @@ export default {
         .then(res => {
           this.userInfo = res.data
         })
-        .catch(err => {
-          console.log(err)
-        })
     },
     // 点击退出以后 退出登录
     handleMenuItem (command) {
