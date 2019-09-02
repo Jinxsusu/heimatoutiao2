@@ -38,12 +38,9 @@ export default {
   methods: {
     // 发送请求获取用户数据
     getUserInfo () {
-      // 获取到token值并保存到变量中
-      let token = window.localStorage.getItem('user-token')
       // 发送请求
       this.$axios({
-        url: '/user/profile',
-        headers: { Authorization: `Bearer ${token}` }
+        url: '/user/profile'
       })
         .then(res => {
           // console.log(res)
@@ -81,6 +78,7 @@ export default {
   .left {
     display: flex;
     align-items: center;
+    width: 300px;
     .icon {
       font-size: 22px;
       margin-right: 3px;
