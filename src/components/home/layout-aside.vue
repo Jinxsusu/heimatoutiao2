@@ -4,6 +4,7 @@
       <img src="../../assets/img/logo_admin.png" alt />
     </div>
     <el-menu
+    style="border:none"
       background-color="#323745"
       text-color="#adafb5"
       active-text-color="#ffd04b"
@@ -33,10 +34,10 @@
         </template>
         <el-menu-item index="/home/fansdata">图文数据</el-menu-item>
         <el-menu-item index="/home/fansinfo">粉丝概况</el-menu-item>
-        <el-menu-item index="/home/fanslist">粉丝画像</el-menu-item>
-        <el-menu-item index="/home/fansimg">粉丝列表</el-menu-item>
+        <el-menu-item index="/home/fansimg">粉丝画像</el-menu-item>
+        <el-menu-item index="/home/fanslist">粉丝列表</el-menu-item>
       </el-submenu>
-      <el-menu-item  index="/home/account">
+      <el-menu-item index="/home/account">
         <i class="el-icon-user-solid"></i>
         <span slot="title">账户信息</span>
       </el-menu-item>
@@ -50,9 +51,9 @@ export default {}
 
 <style lang='less' scoped>
 .layout-aside {
-  width: 200px;
   height: 100vh;
-  background-color: #323745;
+  width: 100%;
+  background-color:#323745;
   .title {
     text-align: center;
     background-color: #2e2f32;

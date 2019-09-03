@@ -50,4 +50,4 @@ export default {
   install: function (Vue) {
     Vue.prototype.$axios = axios// axios赋值给全局属性
   }
-}// 抛出router
+}
