@@ -10,11 +10,12 @@
       <el-table-column prop="fans_comment_count" label="粉丝评论数"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="obj">
-          <!-- obj是子组件传过来的属性的集合
+          <!-- 作用域插件
+            obj是子组件传过来的属性的集合
           里边有row column $index 和store的数据-->
           <el-button type="text" size="small">修改评论</el-button>
           <el-button
-          @click="openOrClose(obj.row)"
+            @click="openOrClose(obj.row)"
             type="text"
             size="small"
             :style="{color: obj.row.comment_status ? '#E6A23C':'#409EFF'}"
@@ -22,6 +23,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-row type="flex" justify="center" style="margin:15px 0">
+      <el-pagination
+        background
+        @current-change="changePage"
+        layout="prev, pager, next"
+        :total="page.total"
+        :page-size="page.pageSize"
+        :current-page="page.page"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -29,10 +40,24 @@
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        page: 1, // 当前页码
+        pageSize: 10, // 当前每页条数
+        total: 0 // 总条数
+      }
     }
   },
   methods: {
+    changePage (newPage) {
+      // 当页面上的页码改变传给newPageta中的page数据
+      // 传给后台 后台再将需要的数据重新拉一遍渲染到列表中
+      // 所以params 传入当前的page 和 pageSize
+      // 然后调用方法重新拉取数据
+      this.page.page = newPage
+      this.getComments()
+    },
+
     // 打开关闭评论 改变文章状态
     openOrClose (row) {
       // 传入参数是 当前文章的状态 发请求取反 这个参数是通过作用域插槽获得的
@@ -60,11 +85,14 @@ export default {
       this.$axios({
         url: '/articles',
         params: {
-          response_type: 'comment'
+          response_type: 'comment',
+          page: this.page.page,
+          per_page: this.pageSize
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.list = res.data.results
+        this.page.total = res.data.total_count
       })
     }
   },
