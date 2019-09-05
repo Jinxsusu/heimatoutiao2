@@ -25,6 +25,10 @@ export default new Router({
     {
       path: 'comment',
       component: () => import('./views/comment/index.vue')
+    },
+    {
+      path: 'material',
+      component: () => import('./views/material/index.vue')
     }
     ]
   }
