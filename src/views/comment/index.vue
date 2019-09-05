@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card   v-loading="loading">
     <bread-crumb slot="header">
       <template slot="title">评论列表</template>
     </bread-crumb>
@@ -40,6 +40,9 @@
 export default {
   data () {
     return {
+      loading: false,
+      // 请求数据之前 响应数据之后事件可能有点长 加一个进度条 来提示 用户 增加用户体验 用element-ui来做
+      // v-loading 是布尔值 默认为false 发送请求的时候为true 响应回来再改成false
       list: [],
       page: {
         page: 1, // 当前页码
@@ -81,6 +84,7 @@ export default {
       return row.comment_status ? '正常' : '关闭'
     },
     getComments () {
+      this.loading = true
       // 发送请求获取数据
       this.$axios({
         url: '/articles',
@@ -90,6 +94,7 @@ export default {
           per_page: this.pageSize
         }
       }).then(res => {
+        this.loading = false
         // console.log(res)
         this.list = res.data.results
         this.page.total = res.data.total_count
