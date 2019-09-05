@@ -150,8 +150,8 @@ export default {
     border-radius: 5px;
 
     .img-card {
-      width: 160px;
-      height: 160px;
+      width: 190px;
+      height: 190px;
       margin: 30px;
       position: relative;
       img {
