@@ -3,14 +3,22 @@
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <!-- :http-request 实现自定义上传 -->
+    <el-upload class="upload-btn" :http-request="uploadImg" action :show-file-list="false">
+      <el-button size="middle" type="primary">上传图片</el-button>
+    </el-upload>
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部素材" name="all">
         <div class="card-list">
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
             <el-row class="operate" type="flex" align="middle" justify="space-around">
-              <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i
+                class="el-icon-star-on"
+                :style="{color:item.is_collected ? 'red' :''}"
+                @click="collectoOrCancel(item)"
+              ></i>
+              <i class="el-icon-delete-solid" @click="delItem(item)"></i>
             </el-row>
           </el-card>
         </div>
@@ -51,6 +59,49 @@ export default {
     }
   },
   methods: {
+    // 上传图片
+    uploadImg (params) {
+      // 转换上传文件的类型
+      let obj = new FormData() // 创建一个新的 FormData 对象。
+      console.log(obj)
+      obj.append('image', params.file)
+      // FormData.append() 从向 FormData 中添加新的属性值，FormData 对应的属性值存在也不会覆盖原值，而是新增一个值，如果属性不存在则新增一项属性值。
+      this.$axios({
+        //   发送请求
+        url: '/user/images',
+        method: 'post',
+        data: obj
+      }).then(() => {
+        this.getMaterial()
+      })
+    },
+    // 删除数据
+    delItem (item) {
+      this.$confirm('您确定要删除此图片吗?', '提示').then(() => {
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'delete'
+        }).then(() => {
+          // 成功后 重新调用数据
+          this.getMaterial()
+        })
+      })
+      // 确定后发送请求
+    },
+    collectoOrCancel (item) {
+      // 提示用户
+      let msg = item.is_collected ? '取消' : ''
+      this.$confirm(`您确定要${msg}收藏此图片吗?`, '提示').then(() => {
+        // 确定后发送请求
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'put',
+          data: { collect: !item.is_collected } // 取反
+        }).then(() => {
+          this.getMaterial()
+        })
+      })
+    },
     changePage (newPage) {
       this.page.page = newPage
       this.getMaterial()
@@ -71,7 +122,7 @@ export default {
           collect: this.activeName === 'collect'
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.loading = false // 响应数据之后 改成false
         this.page.total = res.data.total_count
         this.list = res.data.results
@@ -86,6 +137,12 @@ export default {
 
 <style lang="less" scoped>
 .material {
+  position: relative;
+  .upload-btn {
+    position: absolute;
+    right: 20px;
+    top: 60px;
+  }
   .card-list {
     display: flex;
     flex-wrap: wrap;
