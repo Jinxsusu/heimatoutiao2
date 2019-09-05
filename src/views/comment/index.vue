@@ -14,6 +14,7 @@
           里边有row column $index 和store的数据-->
           <el-button type="text" size="small">修改评论</el-button>
           <el-button
+          @click="openOrClose(obj.row)"
             type="text"
             size="small"
             :style="{color: obj.row.comment_status ? '#E6A23C':'#409EFF'}"
@@ -32,13 +33,29 @@ export default {
     }
   },
   methods: {
+    // 打开关闭评论 改变文章状态
+    openOrClose (row) {
+      // 传入参数是 当前文章的状态 发请求取反 这个参数是通过作用域插槽获得的
+      let msg = row.comment_status ? '关闭' : '打开'
+      this.$confirm(`您是否要${msg}评论`, '提示').then(() => {
+        // 提示成功以后发送请求
+        this.$axios({
+          method: 'put',
+          url: '/comments/status',
+          params: { article_id: row.id.toString() }, // id数字较大要进行设置
+          data: { allow_comment: !row.comment_status } // 取反
+        }).then(res => {
+          this.getComments() // 成功之后重新调用 拉取数据
+        })
+      })
+    },
     formatter (row) {
       // formatter 是el-table-colum的方法(属性)可以设置自定义显示内容
       // 传入的参数是row, column, cellValue, index这几个
       // 根据传入参数的状态来确定返回的内容
       return row.comment_status ? '正常' : '关闭'
     },
-    getCommnets () {
+    getComments () {
       // 发送请求获取数据
       this.$axios({
         url: '/articles',
@@ -52,7 +69,7 @@ export default {
     }
   },
   created () {
-    this.getCommnets()
+    this.getComments()
   }
 }
 </script>
